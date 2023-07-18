@@ -1,9 +1,11 @@
 """
 DONE:
+- build environment
 
 TODO:
-- build environment
 - build Gentleman Algorithm (GA)
+    - build alg for one agent
+    - build function for multiple agents
 - build metrics: SoC, makespan, time
 - build PP
 - compare to PP

@@ -338,7 +338,7 @@ def a_star(start, goal, nodes, h_func,
         if node_current.xy_name == goal.xy_name:
             # break
             # if there is a future constraint of a goal
-            if len(v_constr_dict[node_current.xy_name]) > 0:
+            if v_constr_dict and len(v_constr_dict[node_current.xy_name]) > 0:
                 # we will take the maximum time out of all constraints
                 max_t = max(v_constr_dict[node_current.xy_name])
                 # and compare to the current time
@@ -425,6 +425,7 @@ def try_a_map_from_pic():
     # ------------------------- #
     # constraint_dict = None
     v_constr_dict = {node.xy_name: [] for node in env.nodes}
+    e_constr_dict = {node.xy_name: [] for node in env.nodes}
     # v_constr_dict = {'30_12': [69], '29_12': [68, 69]}
     perm_constr_dict = {node.xy_name: [] for node in env.nodes}
     # ------------------------- #
@@ -434,7 +435,7 @@ def try_a_map_from_pic():
     node_start = env.start_positions[0]
     node_goal = env.goal_positions[0]
     result, info = a_star(start=node_start, goal=node_goal, nodes=env.nodes, h_func=h_func,
-                          v_constr_dict=v_constr_dict, perm_constr_dict=perm_constr_dict,
+                          v_constr_dict=v_constr_dict, e_constr_dict=e_constr_dict, perm_constr_dict=perm_constr_dict,
                           plotter=None, middle_plot=True, nodes_dict=env.nodes_dict,
                           )
     profiler.disable()
