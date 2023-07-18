@@ -26,6 +26,19 @@ import time
 import json
 from os.path import exists
 
+import cProfile
+import pstats
+
+import abc
+import os
+import re
+
+
+class AttributeDict(dict):
+    __getattr__ = dict.__getitem__
+    __setattr__ = dict.__setitem__
+    __delattr__ = dict.__delitem__
+
 
 
 
