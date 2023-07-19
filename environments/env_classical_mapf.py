@@ -11,6 +11,7 @@ class EnvClassicalMAPF:
         self.n_agents = n_agents
         self.to_render = to_render
         self.plot_every = plot_every
+        # height - x, width - y
         self.map_np, (self.height, self.width), self.nodes, self.nodes_dict = None, (-1, -1), None, None
         self.start_positions = None
         self.goal_positions = None
@@ -18,12 +19,22 @@ class EnvClassicalMAPF:
         if self.to_render:
             self.fig, self.ax = plt.subplot_mosaic("AAB;AAC;AAD", figsize=(12, 8))
 
-    def create_new_problem(self):
+    def create_new_problem(self, start_points=None, goal_points=None):
         self.map_np, (self.height, self.width), self.nodes, self.nodes_dict = create_nodes_from_map(
             self.map_dir, path=self.path_to_maps, show_map=self.show_map)
-        positions_pool = random.sample(self.nodes, self.n_agents * 2)
-        self.start_positions = positions_pool[:self.n_agents]
-        self.goal_positions = positions_pool[self.n_agents:]
+        if start_points:
+            self.n_agents = len(start_points)
+            self.start_positions = []
+            self.goal_positions = []
+            for start_p, goal_p in zip(start_points, goal_points):
+                start_node = self.nodes_dict[f'{start_p[0]}_{start_p[1]}']
+                self.start_positions.append(start_node)
+                goal_node = self.nodes_dict[f'{goal_p[0]}_{goal_p[1]}']
+                self.goal_positions.append(goal_node)
+        else:
+            positions_pool = random.sample(self.nodes, self.n_agents * 2)
+            self.start_positions = positions_pool[:self.n_agents]
+            self.goal_positions = positions_pool[self.n_agents:]
 
     def reset(self):
         pass
@@ -45,7 +56,10 @@ class EnvClassicalMAPF:
                     'goal_positions': self.goal_positions,
                 })
 
-                plot_mapf_problem(self.ax['A'], info)
+                if 'ga_plans' in info:
+                    plot_ga_plans(self.ax['A'], info)
+                else:
+                    plot_mapf_problem(self.ax['A'], info)
 
                 plt.pause(0.001)
 

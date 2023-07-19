@@ -304,8 +304,9 @@ def get_node(successor_xy_name, node_current, nodes, nodes_dict, open_nodes, clo
 
 def reset_nodes(start, goal, nodes, **kwargs):
     _ = [node.reset() for node in nodes]
-    start.reset(**kwargs)
-    return start, goal, nodes
+    a_start = Node(x=start.x, y=start.y, neighbours=start.neighbours)
+    a_start.reset(**kwargs)
+    return a_start, goal, nodes
 
 
 def a_star(start, goal, nodes, h_func,

@@ -6,6 +6,7 @@ TODO:
 - build Gentleman Algorithm (GA)
     - build alg for one agent
     - build function for multiple agents
+    - check for v, e and perm conflicts
 - build metrics: SoC, makespan, time
 - build PP
 - compare to PP
