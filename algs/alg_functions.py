@@ -89,9 +89,17 @@ def get_agents_in_conf(c_v_list, c_e_list):
     # c_e_for_agent_list.append((agent_1, agent_2, prev_node_1.x, prev_node_1.y, node_1.x, node_1.y, t))
     agents_in_conf.extend([(conf[1], conf[4], conf[5], conf[6]-1) for conf in c_e_list])
 
-    sorted_agents_in_conf = sorted(agents_in_conf, key=lambda x: x[3], reverse=True)
-    # sorted_agents_in_conf = list(set([a[0] for a in sorted_agents_in_conf]))
+    # sorted_agents_in_conf = sorted(agents_in_conf, key=lambda x: x[3], reverse=True)
+    sorted_agents_in_conf = sorted(agents_in_conf, key=lambda x: x[3], reverse=False)
     return sorted_agents_in_conf
+
+
+def build_perm_constr_dict(nodes, final_list):
+    perm_constr_dict = {node.xy_name: [] for node in nodes}
+    for final_item in final_list:
+        xy_name, t = final_item
+        perm_constr_dict[xy_name].append(t)
+    return perm_constr_dict
 
 
 def build_constraints(nodes, other_paths):
