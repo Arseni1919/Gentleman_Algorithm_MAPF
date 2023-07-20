@@ -100,23 +100,12 @@ class ALgGA:
             new_plan.append(new_node)
         return new_plan
 
-    def cut_before_and_after(self, curr_agent, conf_t):
+    @staticmethod
+    def cut_before_and_after(curr_agent, conf_t):
         # sets plan_before, plan_after, col_node
         curr_agent.plan_before = curr_agent.plan[:conf_t + 1]
         curr_agent.plan_after = curr_agent.plan[conf_t + 1:]
         curr_agent.col_node = curr_agent.plan_before[-1]
-
-        # for agent in self.agents:
-        #     if agent.plan:
-        #         if len(agent.plan) > conf_t:
-        #             agent.plan_before = agent.plan[:conf_t+1]
-        #             agent.plan_after = agent.plan[conf_t+1:]
-        #         else:
-        #             new_plan = self.roll_until_conf_t(agent.plan, conf_t)
-        #             agent.plan = new_plan
-        #             agent.plan_before = new_plan
-        #             agent.plan_after = []
-        #         agent.col_node = agent.plan_before[-1]
 
     def build_path_to_aside_node(self, curr_agent, err_aside_path_list):
         final_list = [(xy_name, 0) for xy_name in err_aside_path_list]
@@ -166,16 +155,6 @@ class ALgGA:
                 break
         if not succeeded:
             raise RuntimeError('[ERROR]: What happened?')
-
-    def check_for_conflicts_with_aside_path(self, curr_agent, conf_agent, aside_agents_done, conf_t):
-        more_confs = []
-        conf_agent_path_names = [node.xy_name for node in conf_agent.aside_path]
-        for agent in self.agents:
-            if agent.name != conf_agent.name and agent.name != curr_agent.name:  # other agent
-                if agent.plan and agent not in aside_agents_done:  # that has a plan but without aside path
-                    if agent.col_node.xy_name in conf_agent_path_names:  # and has a conflict with the conf_agent
-                        more_confs.append((agent, agent.col_node.x, agent.col_node.y, conf_t))
-        return more_confs
 
     @staticmethod
     def create_path_to_go(plan1: List, plan2: List):
@@ -243,28 +222,6 @@ class ALgGA:
             new_plan.append(next_node)
             prev_node = next_node
         return new_plan
-
-    def create_one_backward_plan(self, aside_agent, others_to_consider):
-        # updates plan
-        succeeded = True
-        # every aside_node is the last items of i_agent.plan
-        new_plan = aside_agent.plan[:-1]
-        next_t = len(new_plan)
-
-        # append back from aside path
-        reversed_aside_path = aside_agent.aside_path[::-1]
-        path = self.go_along_aside_path(new_plan, reversed_aside_path, next_t, others_to_consider)
-
-        # append continuing the path
-        for next_node in aside_agent.plan_after:
-            next_node.t = next_t
-            next_node.ID = f'{next_node.x}_{next_node.y}_{next_node.t}'
-            new_plan.append(next_node)
-            next_t += 1
-
-        aside_agent.plan = new_plan
-
-        return succeeded
 
     def calc_backward_plans(self, agents_with_plan):
         """
