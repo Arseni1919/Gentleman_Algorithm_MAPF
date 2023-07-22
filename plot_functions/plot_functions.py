@@ -15,6 +15,7 @@ def plot_ga_plans(ax: matplotlib.axes.Axes, info: dict):
     ax.cla()
     info = AttributeDict(info)
     plans = info.ga_plans
+    pause_time = info.pause_time if 'pause_time' in info else 1
     max_duration = max([len(plan) for _, plan in plans.items()])
 
     for t in range(max_duration):
@@ -51,7 +52,7 @@ def plot_ga_plans(ax: matplotlib.axes.Axes, info: dict):
             ax.text(last_node.x, last_node.y, f'{agent_name}', color='orange', size=7)
         ax.scatter(a_x, a_y, marker='*', c='yellow')
         ax.set_title(f"Gentleman's Plans, TIME: {t}")
-        plt.pause(1)
+        plt.pause(pause_time)
         # plt.pause(0.0001)
 
     ax.set_title("Gentleman's Plans")

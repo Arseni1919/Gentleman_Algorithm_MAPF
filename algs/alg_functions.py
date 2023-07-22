@@ -121,3 +121,16 @@ def build_constraints(nodes, other_paths):
                     e_constr_dict[f'{prev_node.x}_{prev_node.y}'].append((node.x, node.y, node.t))
                 prev_node = node
     return v_constr_dict, e_constr_dict, perm_constr_dict
+
+
+def correct_times_in_nodes(nodes):
+    for i, node in enumerate(nodes):
+        if i != node.t:
+            raise RuntimeError('[ERROR]: wtf!')
+        node.ID = f'{node.x}_{node.y}_{node.t}'
+
+
+def update_times_in_nodes(nodes):
+    for i, node in enumerate(nodes):
+        node.t = i
+        node.ID = f'{node.x}_{node.y}_{i}'
